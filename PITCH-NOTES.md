@@ -35,14 +35,34 @@ If GlossGenius is lapsing, her client list, appointment history and service note
 
 Do this before you pitch, not after.
 
+## Instagram recon — read this before you walk in
+
+Pulled from the public grid at `instagram.com/beauty.by.payne` on 3 September 2026 (341 followers).
+
+**She is on maternity leave and closed to new appointments.** A post dated 9 July 2026 states that from **1 August** she is no longer accepting new appointment requests while she prepares for leave, and refers her clients to other nail techs in the meantime. This is the single most important fact for timing the pitch — the site's primary CTA is "Request an appointment", for a business that is not currently taking them.
+
+**Her most recent post, 29 August 2026, is a "COMING SOON" flyer with tear-off tabs taped beside a freshly painted studio door.** The flyer's body text is too low-resolution to read from the grid image, so treat the details as unknown — but a new space appears to be opening. Worth reading properly before you walk in; it changes whether this is a "welcome back" site or a "new studio launch" site, and the launch framing is the stronger sell.
+
+**Practical read:** she is not buying a website this week. But a site that is finished and waiting when she reopens is a much easier yes than one she has to think about while managing a newborn and a new space. Pitch it as ready-for-reopening, not as something she needs to act on now.
+
+**Other facts worth having:**
+
+- Trading name is **Beauty By Payne LLC**; she posts as **Charley Payne** (she/her).
+- Bio still links `beautybypayne.glossgenius.com` — check the redirect claim above on your own phone, it is the opening.
+- Instagram highlights already exist for Reviews, Prices, News, Policies and Press Ons. **The Reviews highlight is where the testimonials come from** — item 5 below may already be solved without asking her.
+- Pricing signals from her own posts: nail art add-ons run **$5 for simple touches up to $75 for full custom**, and she has advertised discounted **$45 portfolio-model sets**. Useful for sizing what $1,800 means against her ticket.
+- Her posts show a printed price list on the table in most shots. If you can get a clean photo of it, that is the services copy in item 3 written for you.
+
+**On the photos:** the four gallery images are her own work, downsampled from Instagram's 640px grid renders and cropped to 4:5. They are good enough to pitch with and not good enough to ship. If she engages, get the originals off her phone.
+
 ## What she needs to supply
 
 Ordered by impact.
 
 1. **An appointment request form.** `index.html` has a placeholder iframe at `REPLACE-WITH-YOUR-APPOINTMENT-FORM`. She builds it in JotForm — service wanted, preferred days, name, contact. Fifteen minutes of her time. The site cannot go live without it.
-2. **City and travel radius.** Appears in the hero, the FAQ, the footer and both schema blocks. Without it there is no local SEO at all.
+2. **Travel radius.** City is now set to Winston-Salem across the hero, footers and both schema blocks. The travel radius for events is still open (`class="fill"` on the events page).
 3. **Her nail services and what a typical appointment involves.** The whole Nails card on the home page is placeholder text.
-4. **Photos — eight in total.** Home page: finished nails, chains on the tray, a weld close up, the studio. Events page: the tray, a weld, a group showing wrists, the event setup. Phone photos are fine and better than stock.
+4. **Photos — four still needed, all permanent jewelry.** The home page gallery is now filled with four real nail sets pulled from her public Instagram grid (see *Instagram recon* below). Still missing, and she is the only source: chains on the tray, a weld close up, a group showing wrists, the event setup. The entire events page still has no imagery, and **there is not a single permanent-jewelry photo on her Instagram grid** — the service the site leads with has no visual proof anywhere. Phone photos are fine and better than stock.
 5. **Testimonials with first names.** There is no testimonial section on either page because I will not invent one. Once she supplies three to five, that is the largest conversion gain available.
 6. **Studio location and how to find it**, plus **how she takes payment**. Both are FAQ placeholders.
 7. **Time per guest and guests per hour**, and her **busy season** — event page planning questions.
@@ -54,7 +74,7 @@ Every unknown is marked on the page with a gold dashed highlight. Search for `cl
 
 - **No invented testimonials.** No section at all rather than filler.
 - **No invented prices.** Both pages route pricing to an enquiry, which is how she already works.
-- **No invented photos.** Labelled slots rather than AI-generated jewelry that would misrepresent her work.
+- **No invented photos.** Her own Instagram photos in the nail gallery; labelled slots everywhere else, rather than AI-generated jewelry that would misrepresent her work.
 - **No invented location.** Marked, not guessed.
 
 ## Technical notes

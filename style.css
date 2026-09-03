@@ -86,6 +86,7 @@ ol.steps p{color:var(--skin-dim);margin:0;font-size:.97rem}
 .shots{display:grid;gap:14px;grid-template-columns:repeat(2,1fr);margin-top:14px}
 @media(min-width:800px){.shots{grid-template-columns:repeat(4,1fr)}}
 .shot{aspect-ratio:4/5;border:1px dashed rgba(217,169,60,.45);border-radius:6px;background:linear-gradient(160deg,#241A16,#1B1310);display:flex;align-items:center;justify-content:center;text-align:center;color:var(--gold-soft);font-size:.82rem;padding:14px;line-height:1.4}
+img.shot{width:100%;height:auto;aspect-ratio:4/5;align-self:start;display:block;object-fit:cover;padding:0;border:1px solid rgba(217,169,60,.22)}
 
 details{border-top:1px solid rgba(233,216,206,.13);padding:18px 0}
 details:last-of-type{border-bottom:1px solid rgba(233,216,206,.13)}
