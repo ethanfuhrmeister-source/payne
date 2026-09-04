@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ethanfuhrmeister-source.github.io/payne/sitemap.xml
