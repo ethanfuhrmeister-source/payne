@@ -43,13 +43,13 @@
   ];
 
   var TIERS = [
-    { label: "No art", value: "" },
-    { label: "Tier One — Simple Touch ($5–$10)", value: "Tier One — Simple Touch ($5–$10)" },
-    { label: "Tier Two — Mini Designs ($10–$20)", value: "Tier Two — Mini Designs ($10–$20)" },
-    { label: "Tier Three — Mixed Art Set ($20–$35)", value: "Tier Three — Mixed Art Set ($20–$35)" },
-    { label: "Tier Four — Detailed Design ($35–$50)", value: "Tier Four — Detailed Design ($35–$50)" },
-    { label: "Tier Five — Full Custom Art ($50–$75)", value: "Tier Five — Full Custom Art ($50–$75)" },
-    { label: "Not sure — I'll send inspo pics", value: "Not sure yet, will send inspiration pictures" }
+    { main: "No art",      note: "",         value: "" },
+    { main: "Simple Touch",   note: "$5–$10",  value: "Tier One — Simple Touch ($5–$10)" },
+    { main: "Mini Designs",   note: "$10–$20", value: "Tier Two — Mini Designs ($10–$20)" },
+    { main: "Mixed Art Set",  note: "$20–$35", value: "Tier Three — Mixed Art Set ($20–$35)" },
+    { main: "Detailed Design",note: "$35–$50", value: "Tier Four — Detailed Design ($35–$50)" },
+    { main: "Full Custom Art",note: "$50–$75", value: "Tier Five — Full Custom Art ($50–$75)" },
+    { main: "Not sure yet",   note: "I'll send pics", value: "Not sure yet, will send inspiration pictures" }
   ];
 
   var DAY_NAMES   = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
@@ -123,6 +123,9 @@
     contact:  root.querySelector("#sch-contact"),
     notes:    root.querySelector("#sch-notes"),
     summary:  root.querySelector("#sch-summary"),
+    card:     root.querySelector("#sch-card"),
+    cardWrap: root.querySelector("#sch-card-wrap"),
+    cardEmpty:root.querySelector("#sch-card-empty"),
     actions:  root.querySelector("#sch-actions"),
     copy:     root.querySelector("#sch-copy"),
     status:   root.querySelector("#sch-status")
@@ -130,14 +133,41 @@
 
   /* ── Build the static bits ───────────────────────────────────────── */
 
-  SERVICES.forEach(function (s) {
-    var o = document.createElement("option");
-    o.value = s; o.textContent = s; els.service.appendChild(o);
-  });
-  TIERS.forEach(function (t) {
-    var o = document.createElement("option");
-    o.value = t.value; o.textContent = t.label; els.tier.appendChild(o);
-  });
+  // Native radios behind styled labels: real keyboard and screen-reader
+  // semantics for free, rather than a hand-rolled radiogroup.
+  function buildChips(host, name, items, checkedIndex) {
+    items.forEach(function (item, i) {
+      var id = name + "-" + i;
+      var input = document.createElement("input");
+      input.type = "radio"; input.name = name; input.id = id;
+      input.className = "chip-input"; input.value = item.value;
+      if (i === checkedIndex) input.checked = true;
+      var label = document.createElement("label");
+      label.className = "chip"; label.setAttribute("for", id);
+      if (item.note) {
+        var strong = document.createElement("span");
+        strong.className = "chip-main"; strong.textContent = item.main;
+        var note = document.createElement("span");
+        note.className = "chip-note"; note.textContent = item.note;
+        label.appendChild(strong); label.appendChild(note);
+      } else {
+        label.textContent = item.main;
+      }
+      host.appendChild(input); host.appendChild(label);
+      input.addEventListener("change", render);
+    });
+  }
+
+  buildChips(els.service, "service",
+    SERVICES.map(function (s) { return { main: s, value: s }; }), -1);
+  buildChips(els.tier, "tier", TIERS.map(function (t) {
+    return { main: t.main, note: t.note, value: t.value };
+  }), 0);
+
+  function chosen(name) {
+    var el = root.querySelector('input[name="' + name + '"]:checked');
+    return el ? el.value : "";
+  }
 
   /* ── Calendar ────────────────────────────────────────────────────── */
 
@@ -177,6 +207,7 @@
       } else {
         btn.setAttribute("aria-label", longDate(d));
       }
+      if (key(d) === key(today)) btn.className += " is-today";
       if (active && key(d) === key(active)) btn.className += " is-active";
       if (picks.some(function (p) { return p.dateKey === key(d); })) btn.className += " has-pick";
       btn.tabIndex = key(d) === key(focus) ? 0 : -1;
@@ -195,16 +226,33 @@
       els.slotWrap.innerHTML = '<p class="sch-empty">No times on this day.</p>';
       return;
     }
-    list.forEach(function (t) {
-      var b = document.createElement("button");
-      b.type = "button";
-      b.className = "slot";
-      b.textContent = prettyTime(t);
-      var chosen = picks.some(function (p) { return p.dateKey === key(d) && p.time === t; });
-      if (chosen) b.className += " is-picked";
-      b.setAttribute("aria-pressed", chosen ? "true" : "false");
-      b.addEventListener("click", function () { togglePick(d, t); });
-      els.slotWrap.appendChild(b);
+    var groups = [
+      { name: "Morning",   from: 0,        to: 12 * 60 },
+      { name: "Afternoon", from: 12 * 60,  to: 17 * 60 },
+      { name: "Evening",   from: 17 * 60,  to: 24 * 60 }
+    ];
+    groups.forEach(function (g) {
+      var inGroup = list.filter(function (t) {
+        var m = minutes(t); return m >= g.from && m < g.to;
+      });
+      if (!inGroup.length) return;
+      var head = document.createElement("p");
+      head.className = "slot-group"; head.textContent = g.name;
+      els.slotWrap.appendChild(head);
+      var row = document.createElement("div");
+      row.className = "slot-row";
+      inGroup.forEach(function (t) {
+        var b = document.createElement("button");
+        b.type = "button";
+        b.className = "slot";
+        b.textContent = prettyTime(t);
+        var isPicked = picks.some(function (p) { return p.dateKey === key(d) && p.time === t; });
+        if (isPicked) b.className += " is-picked";
+        b.setAttribute("aria-pressed", isPicked ? "true" : "false");
+        b.addEventListener("click", function () { togglePick(d, t); });
+        row.appendChild(b);
+      });
+      els.slotWrap.appendChild(row);
     });
     els.slotWrap.parentElement.hidden = false;
   }
@@ -259,8 +307,8 @@
 
   function buildText() {
     var lines = ["Appointment request — Beauty By Payne", ""];
-    lines.push("Service: " + (els.service.value || "—"));
-    if (els.tier.value) lines.push("Nail art: " + els.tier.value);
+    lines.push("Service: " + (chosen("service") || "not specified"));
+    if (chosen("tier")) lines.push("Nail art: " + chosen("tier"));
     lines.push("");
     lines.push(picks.length === 1 ? "Preferred time:" : "Preferred times (any of these):");
     picks.forEach(function (p) {
@@ -279,13 +327,38 @@
     return picks.length > 0 && els.name.value.trim() && els.contact.value.trim();
   }
 
+  function renderCard() {
+    var rows = [];
+    rows.push(["Service", chosen("service") || "Not chosen yet"]);
+    if (chosen("tier")) rows.push(["Nail art", chosen("tier")]);
+    rows.push(["Times", picks.map(function (p) {
+      return longDate(p.date) + " at " + prettyTime(p.time);
+    })]);
+    if (els.name.value.trim())    rows.push(["Name", els.name.value.trim()]);
+    if (els.contact.value.trim()) rows.push(["Contact", els.contact.value.trim()]);
+    if (els.notes.value.trim())   rows.push(["Notes", els.notes.value.trim()]);
+
+    els.card.innerHTML = "";
+    rows.forEach(function (r) {
+      var dt = document.createElement("dt"); dt.textContent = r[0];
+      var dd = document.createElement("dd");
+      if (Array.isArray(r[1])) {
+        var ul = document.createElement("ul"); ul.className = "card-times";
+        r[1].forEach(function (t) {
+          var li = document.createElement("li"); li.textContent = t; ul.appendChild(li);
+        });
+        dd.appendChild(ul);
+      } else { dd.textContent = r[1]; }
+      els.card.appendChild(dt); els.card.appendChild(dd);
+    });
+  }
+
   function render() {
-    if (!picks.length) {
-      els.summary.value = "";
-      els.summary.placeholder = "Pick at least one time to build your request.";
-    } else {
-      els.summary.value = buildText();
-    }
+    var empty = !picks.length;
+    els.cardWrap.hidden = empty;
+    els.cardEmpty.hidden = !empty;
+    els.summary.value = empty ? "" : buildText();
+    if (!empty) renderCard();
     var on = ready();
     els.actions.querySelectorAll("[data-needs-ready]").forEach(function (b) {
       b.disabled = !on;
@@ -400,7 +473,7 @@
     els.next.disabled = nextFirst > latest;
   }
 
-  [els.service, els.tier, els.name, els.contact, els.notes].forEach(function (el) {
+  [els.name, els.contact, els.notes].forEach(function (el) {
     el.addEventListener("input", render);
     el.addEventListener("change", render);
   });

@@ -365,17 +365,20 @@
       <div class="sch-grid-2">
 
         <div class="sch-panel">
-          <p class="sch-step">Step 1 &mdash; What you'd like</p>
-          <label class="sch-label" for="sch-service">Service</label>
-          <select id="sch-service" class="sch-input"></select>
-
-          <label class="sch-label" for="sch-tier">Nail art</label>
-          <select id="sch-tier" class="sch-input"></select>
+          <p class="sch-step"><span class="sch-num">1</span> What you'd like</p>
+          <fieldset class="chipset">
+            <legend class="sch-label">Service</legend>
+            <div class="chips" id="sch-service"></div>
+          </fieldset>
+          <fieldset class="chipset">
+            <legend class="sch-label">Nail art</legend>
+            <div class="chips chips-2" id="sch-tier"></div>
+          </fieldset>
           <p class="sch-hint">Art is an add-on, priced in <a href="#pricing">five tiers</a>. I'll quote you before we start.</p>
         </div>
 
         <div class="sch-panel">
-          <p class="sch-step">Step 2 &mdash; Pick up to three times</p>
+          <p class="sch-step"><span class="sch-num">2</span> Pick up to three times</p>
           <div class="cal-nav">
             <button type="button" id="sch-prev" class="cal-arrow" aria-label="Previous month">&#8592;</button>
             <p class="cal-month" id="sch-month" aria-live="polite"></p>
@@ -395,7 +398,7 @@
       <div class="sch-grid-2">
 
         <div class="sch-panel">
-          <p class="sch-step">Step 3 &mdash; How to reach you</p>
+          <p class="sch-step"><span class="sch-num">3</span> How to reach you</p>
           <label class="sch-label" for="sch-name">Your name</label>
           <input id="sch-name" class="sch-input" type="text" autocomplete="name">
 
@@ -406,11 +409,18 @@
           <textarea id="sch-notes" class="sch-input" rows="3"></textarea>
         </div>
 
-        <div class="sch-panel">
-          <p class="sch-step">Your request</p>
+        <div class="sch-panel sch-panel-accent">
+          <p class="sch-step"><span class="sch-num">4</span> Your request</p>
           <ul class="picks" id="sch-picks"></ul>
-          <label class="sch-label" for="sch-summary">Summary</label>
-          <textarea id="sch-summary" class="sch-input sch-summary" rows="9" readonly></textarea>
+
+          <p class="sch-empty" id="sch-card-empty">Pick a time and your request appears here.</p>
+          <div class="req-card" id="sch-card-wrap" hidden>
+            <dl id="sch-card"></dl>
+            <p class="req-foot">Requested, not booked &mdash; Payne confirms by reply.</p>
+          </div>
+
+          <textarea id="sch-summary" class="visually-hidden" rows="9" readonly
+            aria-label="Your request as plain text, for copying"></textarea>
           <div class="sch-actions" id="sch-actions"></div>
           <button type="button" class="btn-line" id="sch-copy">Copy my request</button>
           <p class="sch-status" id="sch-status" role="status" aria-live="polite"></p>
