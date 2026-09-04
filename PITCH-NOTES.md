@@ -53,7 +53,13 @@ Pulled from the public grid at `instagram.com/beauty.by.payne` on 3 September 20
 - Pricing signals from her own posts: nail art add-ons run **$5 for simple touches up to $75 for full custom**, and she has advertised discounted **$45 portfolio-model sets**. Useful for sizing what $1,800 means against her ticket.
 - Her posts show a printed price list on the table in most shots. If you can get a clean photo of it, that is the services copy in item 3 written for you.
 
-**On the photos:** the four gallery images are her own work, downsampled from Instagram's 640px grid renders and cropped to 4:5. They are good enough to pitch with and not good enough to ship. If she engages, get the originals off her phone.
+**On the photos:** the gallery images and the hero are her own work, downsampled from Instagram's 640px grid renders. **Every nail shot on her grid is a 360x640 video thumbnail** — that is the hard ceiling on the hero, which is why the layout uses a portrait image card rather than a large full-bleed photo. They are good enough to pitch with and not good enough to ship. If she engages, get the originals off her phone before anything else.
+
+**Her nail art pricing is now on the site, from her own posts.** Five tiers: Simple Touch $5-$10, Mini Designs $10-$20, Mixed Art Set $20-$35, Detailed Design $35-$50, Full Custom Art $50-$75. These are the **art add-on only** - her base prices for full sets, fills and manicures are still unknown and are marked on the page. Her price list is sitting on the table in most of her photos; one clean shot of it closes the gap.
+
+**She also now takes bookings by phone** - a recent post announces it. The number is not on the site because I do not have it. Worth asking for.
+
+**Design direction:** the site is built to her own visual system, not a generic salon template. Bone and dusty rose ground, oversized condensed grey tier numerals lifted straight from her pricing tiles, coral accent, script wordmark. If she pushes back on anything, it should be the shape language, not the identity.
 
 ## What she needs to supply
 
@@ -62,7 +68,7 @@ Ordered by impact.
 1. **An appointment request form.** `index.html` has a placeholder iframe at `REPLACE-WITH-YOUR-APPOINTMENT-FORM`. She builds it in JotForm — service wanted, preferred days, name, contact. Fifteen minutes of her time. The site cannot go live without it.
 2. **Travel radius.** City is now set to Winston-Salem across the hero, footers and both schema blocks. The travel radius for events is still open (`class="fill"` on the events page).
 3. **Her nail services and what a typical appointment involves.** The whole Nails card on the home page is placeholder text.
-4. **Photos — four still needed, all permanent jewelry.** The home page gallery is now filled with four real nail sets pulled from her public Instagram grid (see *Instagram recon* below). Still missing, and she is the only source: chains on the tray, a weld close up, a group showing wrists, the event setup. The entire events page still has no imagery, and **there is not a single permanent-jewelry photo on her Instagram grid** — the service the site leads with has no visual proof anywhere. Phone photos are fine and better than stock.
+4. **Photos — five still needed, all permanent jewelry.** The home page gallery is now filled with four real nail sets pulled from her public Instagram grid (see *Instagram recon* below). Still missing, and she is the only source: chains on the tray, a weld close up, a group showing wrists, the event setup. The entire events page still has no imagery, and **there is not a single permanent-jewelry photo on her Instagram grid** — the service the site leads with has no visual proof anywhere. Phone photos are fine and better than stock.
 5. **Testimonials with first names.** There is no testimonial section on either page because I will not invent one. Once she supplies three to five, that is the largest conversion gain available.
 6. **Studio location and how to find it**, plus **how she takes payment**. Both are FAQ placeholders.
 7. **Time per guest and guests per hour**, and her **busy season** — event page planning questions.

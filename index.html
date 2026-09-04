@@ -12,10 +12,11 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta property="og:title" content="Beauty By Payne | Nails &amp; Permanent Jewelry">
 <meta property="og:description" content="Licensed nail technician and permanent jeweler. Appointments, permanent jewelry, and event bookings.">
-<meta name="theme-color" content="#F6EBDA">
+<meta name="theme-color" content="#E7D6D2">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Great+Vibes&family=Inter:wght@400;500;600&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="assets/hero.webp" type="image/webp" fetchpriority="high">
 <link rel="stylesheet" href="style.css">
 <script type="application/ld+json">
 {
@@ -39,11 +40,95 @@
     "@type": "OfferCatalog",
     "name": "Services",
     "itemListElement": [
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Nail services" } },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Permanent jewelry" } },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Permanent jewelry for parties and events" } }
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Nail services"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Permanent jewelry"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Permanent jewelry for parties and events"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Nail art — Tier One, Simple Touch"
+        },
+        "priceSpecification": {
+          "@type": "PriceSpecification",
+          "priceCurrency": "USD",
+          "minPrice": 5,
+          "maxPrice": 10
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Nail art — Tier Two, Mini Designs"
+        },
+        "priceSpecification": {
+          "@type": "PriceSpecification",
+          "priceCurrency": "USD",
+          "minPrice": 10,
+          "maxPrice": 20
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Nail art — Tier Three, Mixed Art Set"
+        },
+        "priceSpecification": {
+          "@type": "PriceSpecification",
+          "priceCurrency": "USD",
+          "minPrice": 20,
+          "maxPrice": 35
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Nail art — Tier Four, Detailed Design"
+        },
+        "priceSpecification": {
+          "@type": "PriceSpecification",
+          "priceCurrency": "USD",
+          "minPrice": 35,
+          "maxPrice": 50
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Nail art — Tier Five, Full Custom Art"
+        },
+        "priceSpecification": {
+          "@type": "PriceSpecification",
+          "priceCurrency": "USD",
+          "minPrice": 50,
+          "maxPrice": 75
+        }
+      }
     ]
-  }
+  },
+  "priceRange": "$$"
 }
 </script>
 </head>
@@ -52,14 +137,15 @@
 <header class="masthead">
   <div class="wrap">
     <p class="dateline">
-      <span>Vol. I &middot; No. 1</span>
       <span>Winston-Salem, N.C.</span>
-      <span>By Appointment</span>
+      <span>By appointment</span>
+      <span><a href="https://www.instagram.com/beauty.by.payne">@beauty.by.payne</a></span>
     </p>
     <a class="mark" href="index.html">Beauty By Payne<span> / nails &amp; permanent jewelry</span></a>
     <p class="tagline">Licensed Nail Technician &amp; Permanent Jeweler</p>
   <nav>
     <a href="#services">Services</a>
+    <a href="#pricing">Pricing</a>
     <a href="events.html">Events</a>
     <a href="#questions">Questions</a>
     <a class="cta" href="#book">Book</a>
@@ -71,24 +157,38 @@
 
 <section class="hero">
   <div class="wrap">
+    <div>
     <p class="kicker">Nails &middot; Permanent Jewelry &middot; Parties &amp; Events</p>
     <h1>Nails, and jewelry<br>that stays on.</h1>
 
-    <div class="chain" aria-hidden="true">
-      <svg viewBox="0 0 600 34" preserveAspectRatio="none">
-        <path class="link" d="M0 17 H262" />
-        <path class="link" d="M338 17 H600" style="animation-delay:.15s" />
-        <circle class="halo" cx="300" cy="17" r="2" />
-        <circle class="weld" cx="300" cy="17" r="4.5" />
-      </svg>
-    </div>
 
-    <p class="lede"><span class="dropcap">I</span>'m Payne, a licensed nail tech and permanent jeweler in Winston-Salem. I do nails by appointment, and I weld permanent jewelry here in the studio or at your event.</p>
-    <p class="sub">Booking runs through the form below. Send me what you're after and I'll come back with times.</p>
+    <p class="lede">I&rsquo;m Payne, a licensed nail tech and permanent jeweler in Winston-Salem. I do nails by appointment, and I weld permanent jewelry here in the studio or at your event.</p>
+    <p class="sub">Booking runs through the form below. Send me what you&rsquo;re after and I&rsquo;ll come back with times.</p>
 
     <div class="actions">
       <a class="btn" href="#book">Request an appointment</a>
       <a class="btn-line" href="events.html">Book me for an event</a>
+    </div>
+    </div>
+
+    <div class="hero-media">
+      <picture>
+        <source srcset="assets/hero.webp" type="image/webp">
+        <img class="hero-shot" src="assets/hero.jpg" width="480" height="600"
+          fetchpriority="high" decoding="async"
+          alt="Dark navy manicure with hand-painted accent nails by Beauty By Payne">
+      </picture>
+      <div class="float-card">
+        <picture>
+          <source srcset="assets/nails-checker.webp" type="image/webp">
+          <img src="assets/nails-checker.jpg" width="800" height="1000" loading="lazy" decoding="async" alt="">
+        </picture>
+        <div>
+          <p class="float-title">Nail art, five tiers</p>
+          <p class="float-price">From $5</p>
+          <a href="#pricing">See the tiers</a>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -103,12 +203,14 @@
       <div class="card">
         <h3>Nails</h3>
         <p class="who">By appointment, in studio</p>
-        <p><span class="fill">Short paragraph on your nail services — what you offer, what a typical appointment involves, roughly how long it takes.</span></p>
+        <p><span class="fill">Short paragraph on what a typical appointment involves and roughly how long it takes.</span></p>
         <ul>
-          <li><span class="fill">Service</span></li>
-          <li><span class="fill">Service</span></li>
-          <li><span class="fill">Service</span></li>
+          <li>Manicures</li>
+          <li>Acrylic full sets and fills</li>
+          <li>Nail art, priced in five tiers</li>
+          <li>Press-on sets</li>
         </ul>
+        <a class="more" href="#pricing">See what nail art costs</a>
       </div>
 
       <div class="card primary">
@@ -123,6 +225,49 @@
         <a class="more" href="events.html">Bring it to your party or event</a>
       </div>
     </div>
+  </div>
+</section>
+
+
+<section id="pricing">
+  <div class="wrap">
+    <h2>What nail art costs</h2>
+    <p class="section-lede">Art is priced as an add-on in five tiers, based on time, detail and materials &mdash; from $5 for a simple touch up to $75 for full custom work. We talk it through before I start and I quote you first, so nothing is a surprise.</p>
+
+    <ol class="tiers">
+        <li class="tier">
+          <p class="tier-no">Tier One</p>
+          <h3>Simple Touch</h3>
+          <p class="tier-price">$5–$10</p>
+          <p class="desc">Chrome finish, one color per nail, or minimal accents — lines, dots, or foil on a few fingers.</p>
+        </li>
+        <li class="tier">
+          <p class="tier-no">Tier Two</p>
+          <h3>Mini Designs</h3>
+          <p class="tier-price">$10–$20</p>
+          <p class="desc">Accent nail florals, small decals, stickers, French tips, or color blocking on a few fingers.</p>
+        </li>
+        <li class="tier">
+          <p class="tier-no">Tier Three</p>
+          <h3>Mixed Art Set</h3>
+          <p class="tier-price">$20–$35</p>
+          <p class="desc">A mix of designs across most nails — French with art, layered effects, swirl sets, abstract art.</p>
+        </li>
+        <li class="tier">
+          <p class="tier-no">Tier Four</p>
+          <h3>Detailed Design</h3>
+          <p class="tier-price">$35–$50</p>
+          <p class="desc">Hand-painted themes, multiple techniques in one set, detailed freehand or layered looks.</p>
+        </li>
+        <li class="tier">
+          <p class="tier-no">Tier Five</p>
+          <h3>Full Custom Art</h3>
+          <p class="tier-price">$50–$75</p>
+          <p class="desc">Character art (anime and cartoons), gem placements, sculpted 3D, isolated chrome per nail, full-set themed art. These take the most time and are one-of-a-kind.</p>
+        </li>
+    </ol>
+
+    <p class="pricing-note"><strong>Booking art?</strong> Send inspiration pictures when you book so I can work out the tier and prep for it. These tiers are the art add-on only &mdash; <span class="fill">base prices for full sets, fills and manicures still to confirm.</span></p>
   </div>
 </section>
 
