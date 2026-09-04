@@ -17,7 +17,11 @@ If she later wants a real calendar, that can be added without rebuilding anythin
 
 ## The tradeoff, stated plainly
 
-**A form captures requests. It does not hold a calendar.** She reads them and confirms times manually.
+**The scheduler captures requests. It does not hold a calendar.** She reads them and confirms times manually.
+
+The booking section now has a real scheduler: service and nail-art tier, a month calendar honouring her working days, time slots, and up to three preferred times, which build a structured request. It is a genuine improvement on a blank text box — she gets consistent, parseable requests instead of "sometime next week?".
+
+**What it cannot do, and why.** The site is static, so there is no shared state. Two people can request the same slot and neither is reserved; nothing reaches her until she is sent the request. Every label says *request* and the summary ends with "Times are requested, not booked" for exactly this reason &mdash; **do not reword those to imply a confirmed booking.** Making slots genuinely reserve requires a backend, which means a subscription or a serverless host, which is the thing this build exists to avoid.
 
 For a solo operator that is usually fine, and it is how she is already handling event bookings. Say it out loud in the pitch rather than letting her discover it — it is the one honest weakness of a static build, and naming it first is what makes the rest credible.
 
@@ -65,14 +69,15 @@ Pulled from the public grid at `instagram.com/beauty.by.payne` on 3 September 20
 
 Ordered by impact.
 
-1. **An appointment request form.** `index.html` has a placeholder iframe at `REPLACE-WITH-YOUR-APPOINTMENT-FORM`. She builds it in JotForm — service wanted, preferred days, name, contact. Fifteen minutes of her time. The site cannot go live without it.
-2. **Travel radius.** City is now set to Winston-Salem across the hero, footers and both schema blocks. The travel radius for events is still open (`class="fill"` on the events page).
-3. **Her nail services and what a typical appointment involves.** The whole Nails card on the home page is placeholder text.
-4. **Photos — five still needed, all permanent jewelry.** The home page gallery is now filled with four real nail sets pulled from her public Instagram grid (see *Instagram recon* below). Still missing, and she is the only source: chains on the tray, a weld close up, a group showing wrists, the event setup. The entire events page still has no imagery, and **there is not a single permanent-jewelry photo on her Instagram grid** — the service the site leads with has no visual proof anywhere. Phone photos are fine and better than stock.
-5. **Testimonials with first names.** There is no testimonial section on either page because I will not invent one. Once she supplies three to five, that is the largest conversion gain available.
-6. **Studio location and how to find it**, plus **how she takes payment**. Both are FAQ placeholders.
-7. **Time per guest and guests per hour**, and her **busy season** — event page planning questions.
-8. **A domain.** Replaces `REPLACE-WITH-DOMAIN` in both canonical tags and both schema blocks. A github.io address is a real handicap for local search.
+1. **Her real availability, and where the request goes.** The scheduler ships with **placeholder working days and hours** at the top of `book.js` (`AVAILABILITY`), marked on the page in gold. Wrong hours are worse than none &mdash; a client will request a day she does not work. Also in that config block is `CONTACT`: fill in her phone, her email, or a JotForm URL and a send button appears; leave it empty and the flow falls back to copy-and-paste into the form below, which is what it does today.
+2. **An appointment request form.** `index.html` has a placeholder iframe at `REPLACE-WITH-YOUR-APPOINTMENT-FORM`. She builds it in JotForm — service wanted, preferred days, name, contact. Fifteen minutes of her time. The site cannot go live without it.
+3. **Travel radius.** City is now set to Winston-Salem across the hero, footers and both schema blocks. The travel radius for events is still open (`class="fill"` on the events page).
+4. **Her nail services and what a typical appointment involves.** The whole Nails card on the home page is placeholder text.
+5. **Photos — five still needed, all permanent jewelry.** The home page gallery is now filled with four real nail sets pulled from her public Instagram grid (see *Instagram recon* below). Still missing, and she is the only source: chains on the tray, a weld close up, a group showing wrists, the event setup. The entire events page still has no imagery, and **there is not a single permanent-jewelry photo on her Instagram grid** — the service the site leads with has no visual proof anywhere. Phone photos are fine and better than stock.
+6. **Testimonials with first names.** There is no testimonial section on either page because I will not invent one. Once she supplies three to five, that is the largest conversion gain available.
+7. **Studio location and how to find it**, plus **how she takes payment**. Both are FAQ placeholders.
+8. **Time per guest and guests per hour**, and her **busy season** — event page planning questions.
+9. **A domain.** Replaces `REPLACE-WITH-DOMAIN` in both canonical tags and both schema blocks. A github.io address is a real handicap for local search.
 
 Every unknown is marked on the page with a gold dashed highlight. Search for `class="fill"` to find them all.
 

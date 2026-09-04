@@ -359,7 +359,67 @@
 <section class="book" id="book">
   <div class="wrap">
     <h2>Request an appointment</h2>
-    <p>Tell me what you're after and a few days that suit you. I'll reply with times.</p>
+    <p>Pick what you're after and up to three times that suit you. Nothing is booked until I reply and confirm &mdash; I'll come back to you with the one that works.</p>
+
+    <div class="scheduler" id="scheduler" hidden>
+      <div class="sch-grid-2">
+
+        <div class="sch-panel">
+          <p class="sch-step">Step 1 &mdash; What you'd like</p>
+          <label class="sch-label" for="sch-service">Service</label>
+          <select id="sch-service" class="sch-input"></select>
+
+          <label class="sch-label" for="sch-tier">Nail art</label>
+          <select id="sch-tier" class="sch-input"></select>
+          <p class="sch-hint">Art is an add-on, priced in <a href="#pricing">five tiers</a>. I'll quote you before we start.</p>
+        </div>
+
+        <div class="sch-panel">
+          <p class="sch-step">Step 2 &mdash; Pick up to three times</p>
+          <div class="cal-nav">
+            <button type="button" id="sch-prev" class="cal-arrow" aria-label="Previous month">&#8592;</button>
+            <p class="cal-month" id="sch-month" aria-live="polite"></p>
+            <button type="button" id="sch-next" class="cal-arrow" aria-label="Next month">&#8594;</button>
+          </div>
+          <div class="cal" id="sch-grid" role="grid" aria-label="Choose a date"></div>
+          <p class="sch-hint"><span class="fill">Days and hours shown are a placeholder until Payne confirms her real availability.</span></p>
+
+          <div hidden>
+            <p class="sch-slots-head" id="sch-slots-head"></p>
+            <div class="slots" id="sch-slots"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="sch-grid-2">
+
+        <div class="sch-panel">
+          <p class="sch-step">Step 3 &mdash; How to reach you</p>
+          <label class="sch-label" for="sch-name">Your name</label>
+          <input id="sch-name" class="sch-input" type="text" autocomplete="name">
+
+          <label class="sch-label" for="sch-contact">Phone or email</label>
+          <input id="sch-contact" class="sch-input" type="text" autocomplete="tel">
+
+          <label class="sch-label" for="sch-notes">Anything else</label>
+          <textarea id="sch-notes" class="sch-input" rows="3"></textarea>
+        </div>
+
+        <div class="sch-panel">
+          <p class="sch-step">Your request</p>
+          <ul class="picks" id="sch-picks"></ul>
+          <label class="sch-label" for="sch-summary">Summary</label>
+          <textarea id="sch-summary" class="sch-input sch-summary" rows="9" readonly></textarea>
+          <div class="sch-actions" id="sch-actions"></div>
+          <button type="button" class="btn-line" id="sch-copy">Copy my request</button>
+          <p class="sch-status" id="sch-status" role="status" aria-live="polite"></p>
+        </div>
+
+      </div>
+    </div>
+
+    <p class="sch-fallback" id="scheduler-fallback">Use the form below to send your request.</p>
 
     <div class="form-frame">
       <iframe
@@ -369,7 +429,7 @@
         scrolling="auto"></iframe>
     </div>
 
-    <p style="margin-top:22px;color:var(--skin-dim)">Booking an event instead? <a href="events.html">Use the event form</a> so I get the date and guest count.</p>
+    <p class="book-alt">Booking an event instead? <a href="events.html">Use the event form</a> so I get the date and guest count.</p>
   </div>
 </section>
 
@@ -392,5 +452,6 @@
   <a class="btn" href="#book">Book</a>
 </div>
 
+<script src="book.js" defer></script>
 </body>
 </html>
