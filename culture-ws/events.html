@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Events — Culture, 9th floor Liberty Plaza</title>
+<meta name="description" content="What's on at Culture: collage nights, comedy Thursdays, drawing nights. Free or five dollars, ninth floor, Winston-Salem.">
+<meta property="og:title" content="Events — Culture, 9th floor Liberty Plaza">
+<meta property="og:description" content="What's on at Culture: collage nights, comedy Thursdays, drawing nights. Free or five dollars, ninth floor, Winston-Salem.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#101684">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Archivo+Black&family=Archivo+Narrow:wght@400;700&display=swap" rel="stylesheet">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <a class="wordmark" href="index.html">
+      <span class="dot" aria-hidden="true"></span>Culture
+      <span class="floor">9th fl</span>
+    </a>
+    <button class="menu-btn" aria-expanded="false" aria-controls="nav">Menu</button>
+    <nav id="nav" aria-label="Main">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="events.html">Events</a></li>
+        <li><a href="studios.html">Studios</a></li>
+        <li><a href="classes.html">Classes &amp; Camp</a></li>
+        <li><a href="comedy.html">Comedy</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="visit.html">Visit</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="hero">
+  <div class="wrap">
+    <span class="kicker kicker--tomato">Calendar</span>
+    <h1>What&rsquo;s<br><span class="out">on.</span></h1>
+    <p class="lede" style="margin-top:22px">
+      Weeknights, mostly. Free or five dollars, mostly. Ninth floor, always.
+    </p>
+    <div class="btn-row" role="group" aria-label="Filter events">
+      <button class="btn btn--tomato" data-filter="all" aria-pressed="true">Everything</button>
+      <button class="btn btn--plain" data-filter="comedy" aria-pressed="false">Comedy</button>
+      <button class="btn btn--plain" data-filter="class" aria-pressed="false">Classes</button>
+      <button class="btn btn--plain" data-filter="open studio" aria-pressed="false">Open studio</button>
+      <button class="btn btn--plain" data-filter="gallery" aria-pressed="false">Gallery</button>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Upcoming</h2>
+    </div>
+    <div id="upcoming"></div>
+  </div>
+</section>
+
+<div class="torn torn--up" aria-hidden="true"></div>
+<div class="band band--ink">
+  <div class="wrap" style="padding-block:34px">
+    <h2 style="color:var(--newsprint)">Already<br>happened</h2>
+    <p style="color:var(--newsprint);margin-top:16px">
+      Past nights roll down here so the page is never empty. Photos from these
+      end up on the <a href="gallery.html">gallery page</a>.
+    </p>
+  </div>
+</div>
+<div class="torn" aria-hidden="true"></div>
+
+<section>
+  <div class="wrap">
+    <div id="past"></div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="note tilt-r1">
+      <p>
+        <strong>Putting something on?</strong> If you want to run a night here &mdash;
+        a screening, a reading, a show that needs a room &mdash; email
+        <a href="mailto:libertyplazaws@gmail.com">libertyplazaws@gmail.com</a>
+        with the date you want and roughly how many people.
+      </p>
+    </div>
+  </div>
+</section>
+</main>
+
+<div class="torn" aria-hidden="true"></div>
+<footer class="footer">
+  <div class="wrap">
+    <span class="footer__floor">Ninth floor. Take the elevator.</span>
+    <h2>102 W. 3rd St.<br>Winston-Salem</h2>
+    <div class="footer__grid">
+      <div>
+        <span class="label">Address</span>
+        <address>
+          Culture — Liberty Plaza<br>
+          102 W. 3rd St., 9th floor<br>
+          Winston-Salem, NC 27101
+        </address>
+      </div>
+      <div>
+        <span class="label">Email</span>
+        <p><a href="mailto:libertyplazaws@gmail.com">libertyplazaws@gmail.com</a></p>
+        <span class="label">Phone</span>
+        <p><a href="tel:+13366923581">336-692-3581</a></p>
+      </div>
+      <div>
+        <span class="label">Parking</span>
+        <p>Liberty Plaza deck, or free street parking after 5pm.</p>
+      </div>
+      <div>
+        <span class="label">Instagram</span>
+        <p><a href="https://www.instagram.com/culturews/" rel="noopener">@culturews</a></p>
+        <p><a href="visit.html">How to find us</a></p>
+      </div>
+    </div>
+    <div class="footer__base">
+      <span>Culture &middot; Liberty Plaza &middot; 9th floor</span>
+      <span>&copy; <span data-year></span> Culture Winston-Salem</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/events.js"></script>
+<script src="js/site.js"></script>
+</body>
+</html>
