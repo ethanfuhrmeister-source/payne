@@ -18,6 +18,7 @@ import sys
 import time
 from pathlib import Path
 
+from color import apply_looks
 from common import config_value, connect_resolve, drive_folder, find_media, hms
 
 # Per-Mac record of which paper edits the background job has already built.
@@ -134,6 +135,7 @@ def assemble(resolve, story, sources, args, background=False):
     tl_start = tl.GetStartFrame()
 
     markers, position, placed, failed = Markers(tl), 0, 0, 0
+    placed_items = {}  # source id -> timeline clips, for colour
     print(f"Building '{name}' at {tl_fps:g} fps")
     for ai, act, act_start, beat, beat_start, shot in shot_list(story):
         sid = shot["source"]
@@ -149,6 +151,7 @@ def assemble(resolve, story, sources, args, background=False):
             failed += 1
             continue
         placed += 1
+        placed_items.setdefault(sid, []).append(appended[0])
         try:
             at = appended[0].GetStart() - tl_start
         except Exception:
@@ -169,6 +172,11 @@ def assemble(resolve, story, sources, args, background=False):
             markers.add(at, "Yellow", "NOTE", shot["note"])
 
     summary = f"Placed {placed} shots ({hms(position / tl_fps)})" + (f", {failed} failed" if failed else "")
+    drive = drive_folder()
+    if drive and not args.no_color:
+        color = apply_looks(project, tl, placed_items, drive / "Looks")
+        if color:
+            summary += f"; {color}"
     print(summary)
     if background:
         if previous_tl:
@@ -256,6 +264,7 @@ def main():
     ap.add_argument("story", nargs="?", help="story.json from paper_edit.py (default: newest in Drive)")
     ap.add_argument("--vertical", action="store_true", help="1080x1920 timeline instead of the project default")
     ap.add_argument("--dry-run", action="store_true", help="print the cut list; don't touch Resolve")
+    ap.add_argument("--no-color", action="store_true", help="don't apply the Looks from Drive")
     ap.add_argument("--watch", action="store_true",
                     help="background mode: build any new paper edits from Drive (run by launchd)")
     args = ap.parse_args()

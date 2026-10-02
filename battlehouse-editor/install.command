@@ -19,7 +19,7 @@ if sys.argv[2].strip():
     cfg["resolve_project"] = sys.argv[2].strip()
 json.dump(cfg, open("config.json", "w"), indent=1)
 PYCFG
-mkdir -p "$DRIVE/Footage" "$DRIVE/Paper Edits"
+mkdir -p "$DRIVE/Footage" "$DRIVE/Paper Edits" "$DRIVE/Looks"
 [ -f "$DRIVE/bible.md" ] || cp story/bible.md "$DRIVE/bible.md"
 
 python3 -m pip install --quiet --user -r requirements.txt || echo "(pip install failed - only needed for making paper edits)"

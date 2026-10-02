@@ -9,6 +9,7 @@ rough cut), so editors start from a structured assembly instead of a blank timel
 ```
 Shared Google Drive                          Editor's Mac (DaVinci Resolve Studio 21)
 ├─ Footage/Episode 3/  (.mp4 + .srt)
+├─ Looks/              (show look .drx)
 ├─ bible.md            (cast + storylines)
 └─ Paper Edits/Episode 3/  ◄── Claude ──     Workspace > Scripts > BattleHouse Assemble
      story.md   (for reference)                 → rough-cut timeline, built automatically
@@ -54,6 +55,25 @@ look/voice notes) – it's how Claude knows who's talking.
 Get a Claude API key at console.anthropic.com and save it in a file called `api_key.txt`
 next to `make_paper_edit.command`. Editors who only assemble don't need a key.
 
+## Colour
+Rough cuts come out **already graded with the show's look**. Set it up once:
+1. A colorist (or one editor) grades a representative shot from each camera/setup on the Color
+   page, grabs a still, then right-click the still → *Export* → `.drx`.
+2. Save it in the Drive's `Looks/` folder as **`BattleHouse.drx`**. That alone grades every clip.
+3. Different cameras need different looks? Add more `.drx` (or `.cube` LUT) files and a
+   `Looks/looks.json` that matches footage file names to looks (first match wins):
+   ```json
+   {"default": "BattleHouse.drx",
+    "sources": {"*confessional*": "Confessional.drx", "*poolcam*": "Pool.cube"}}
+   ```
+
+Every automatic rough cut then applies the matching look to each clip and puts the clips in a
+colour group per look (`BH Look - Confessional`, …), so a colorist can adjust a whole look at
+once on the Color page. The notification says how many clips were graded. Swapping a `.drx` in
+Drive changes the look for every rough cut built after that. No `Looks` files = footage is left
+ungraded. This applies a consistent look; it doesn't balance shots individually, so final
+shot-matching is still a colourist's pass.
+
 ## Transcripts
 `make_paper_edit.command` transcribes automatically: every video in the episode folder
 without a transcript gets a `.srt` saved next to it (`day3_main.mp4` → `day3_main.srt`),
@@ -74,6 +94,7 @@ so it only happens once per file and everyone on the Drive can reuse it.
 | `make_paper_edit.command` | Double-click to build a paper edit for an episode. |
 | `transcribe.py` | Step 1 of that: transcribes videos that have no `.srt` yet. `python3 transcribe.py "<Drive>/Footage/Episode 3"` |
 | `paper_edit.py` | Step 2 of that. Command line: `python3 paper_edit.py "<Drive>/Footage/Episode 3" --brief "..." --minutes 20` (`--prompt-only` / `--import-reply` to use the Claude app instead of an API key). |
+| `color.py` | Applies the Drive `Looks/` to each new rough cut (`assemble.py --no-color` skips it). |
 | `uninstall_auto.command` | Turns off automatic rough cuts on that Mac. |
 | `assemble.py` | Builds the timeline. `--watch` is the background job (log: `~/Library/Logs/BattleHouse.log`); the Resolve menu item runs it manually. Command line: `python3 assemble.py [story.json] [--vertical] [--dry-run]`. |
 | `skill/SKILL.md` | How Claude builds a BattleHouse story (A/B/C stories, cold open, act-outs, soundbite rules). Starter – lock in `[VERIFY]` lines with the showrunner. |
