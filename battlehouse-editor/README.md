@@ -19,12 +19,16 @@ Shared Google Drive                          Editor's Mac (DaVinci Resolve Studi
 2. **One person makes the paper edit:** double-click `make_paper_edit.command`, pick the
    episode, type a one-line brief. It **transcribes any new footage automatically** (on the
    Mac, with Whisper), then Claude writes `story.md` into `Paper Edits/<episode>/`.
-3. **Producer/lead reads `story.md`** (storylines, acts, every soundbite with timecodes,
-   coverage gaps) and approves it, or re-runs with a sharper brief.
-4. **Editor opens Resolve** → *Workspace → Scripts → Edit → BattleHouse Assemble*. The newest
-   paper edit is built as a new timeline in a `BattleHouse Story` bin: every shot in story
-   order, with colour markers for acts/beats (with each beat's purpose and music idea),
-   confessionals, host lines, b-roll and notes. Nothing existing is ever overwritten.
+3. **Producer/lead can read `story.md`** (storylines, acts, every soundbite with timecodes,
+   coverage gaps) while the rough cut builds, and re-run with a sharper brief if needed.
+4. **The rough cut builds itself.** On every editor's Mac a background job checks Drive every
+   2 minutes. When a new paper edit appears and Resolve is open (in the BattleHouse project),
+   it builds a new timeline in a `BattleHouse Story` bin and pops up a Mac notification
+   *"BattleHouse rough cut ready"*. Every shot is in story order, with colour markers for
+   acts/beats (purpose + music idea), confessionals, host lines, b-roll and notes. The editor
+   stays on whatever timeline they were working in, and nothing existing is overwritten.
+   Re-running a paper edit (new brief) produces a new version (`v2`, `v3`…).
+   *(Manual option: Workspace → Scripts → Edit → BattleHouse Assemble.)*
 5. **Editor cuts from there:** lays b-roll and reactions over dialogue, tightens, adds music
    and graphics.
 
@@ -39,8 +43,11 @@ look/voice notes) – it's how Claude knows who's talking.
 1. Install **Google Drive for desktop** and make the `BattleHouse` folder **available offline**
    (right-click → *Available offline*). Resolve needs the footage on the disk, not streaming.
 2. Get this `battlehouse-editor` folder onto the Mac (e.g. put a copy in the Drive folder).
-3. Double-click **`install.command`** and drag the shared `BattleHouse` Drive folder into the
-   window when asked. (If macOS blocks it: right-click → *Open*.)
+3. Double-click **`install.command`**, drag the shared `BattleHouse` Drive folder into the
+   window, and type the Resolve project name rough cuts should go into (e.g. `BattleHouse S1`).
+   (If macOS blocks it: right-click → *Open*. If it asks whether python3 may access Google
+   Drive, click *Allow*.) This also turns on automatic rough cuts –
+   `uninstall_auto.command` turns them off again.
 4. In Resolve: *Preferences → System → General → External scripting using: **Local***.
 
 ### The person making paper edits (once)
@@ -67,11 +74,15 @@ so it only happens once per file and everyone on the Drive can reuse it.
 | `make_paper_edit.command` | Double-click to build a paper edit for an episode. |
 | `transcribe.py` | Step 1 of that: transcribes videos that have no `.srt` yet. `python3 transcribe.py "<Drive>/Footage/Episode 3"` |
 | `paper_edit.py` | Step 2 of that. Command line: `python3 paper_edit.py "<Drive>/Footage/Episode 3" --brief "..." --minutes 20` (`--prompt-only` / `--import-reply` to use the Claude app instead of an API key). |
-| `assemble.py` | What the Resolve menu item runs. Command line: `python3 assemble.py [story.json] [--vertical] [--dry-run]`. |
+| `uninstall_auto.command` | Turns off automatic rough cuts on that Mac. |
+| `assemble.py` | Builds the timeline. `--watch` is the background job (log: `~/Library/Logs/BattleHouse.log`); the Resolve menu item runs it manually. Command line: `python3 assemble.py [story.json] [--vertical] [--dry-run]`. |
 | `skill/SKILL.md` | How Claude builds a BattleHouse story (A/B/C stories, cold open, act-outs, soundbite rules). Starter – lock in `[VERIFY]` lines with the showrunner. |
 | `story/bible.md` | Template for the shared `bible.md` in Drive. |
 
 ## Good to know
+- Automatic builds only happen while Resolve is open with the BattleHouse project, and only for
+  paper edits made after the installer ran. If footage hasn't finished syncing, the editor gets
+  one *"waiting for footage"* notice and it retries until the files are there.
 - Claude works from **what's said**, not the picture. Silent moments (looks, action) only
   make it in if the transcript or the brief mentions them.
 - Footage paths are stored relative to the Drive folder, so a paper edit made on one Mac

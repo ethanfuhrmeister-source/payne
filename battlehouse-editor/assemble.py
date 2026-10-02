@@ -13,10 +13,15 @@ Builds one timeline with every shot in story order, plus markers:
 import argparse
 import json
 import os
+import subprocess
 import sys
+import time
 from pathlib import Path
 
-from common import connect_resolve, drive_folder, find_media, hms
+from common import config_value, connect_resolve, drive_folder, find_media, hms
+
+# Per-Mac record of which paper edits the background job has already built.
+STATE = Path.home() / "Library" / "Application Support" / "BattleHouse" / "assembled.json"
 
 BIN_NAME = "BattleHouse Story"
 ACT_COLORS = ["Red", "Blue", "Cyan", "Pink", "Lavender", "Sand", "Mint", "Rose"]
@@ -104,11 +109,13 @@ class Markers:
             self.used.add(frame)
 
 
-def assemble(resolve, story, sources, args):
+def assemble(resolve, story, sources, args, background=False):
     project = resolve.GetProjectManager().GetCurrentProject()
     if not project:
         sys.exit("Open a project in Resolve first.")
     pool = project.GetMediaPool()
+    # Remember where the editor was so a background build doesn't pull them away.
+    previous_tl, previous_folder = project.GetCurrentTimeline(), pool.GetCurrentFolder()
     items = {sid: find_or_import(pool, media) for sid, media in sources.items()}
     fps_of = {sid: float(item.GetClipProperty("FPS") or 30) for sid, item in items.items()}
 
@@ -161,8 +168,87 @@ def assemble(resolve, story, sources, args):
         if shot.get("note"):
             markers.add(at, "Yellow", "NOTE", shot["note"])
 
-    resolve.OpenPage("edit")
-    print(f"Placed {placed} shots ({hms(position / tl_fps)})" + (f", {failed} failed" if failed else ""))
+    summary = f"Placed {placed} shots ({hms(position / tl_fps)})" + (f", {failed} failed" if failed else "")
+    print(summary)
+    if background:
+        if previous_tl:
+            project.SetCurrentTimeline(previous_tl)
+        if previous_folder:
+            pool.SetCurrentFolder(previous_folder)
+    else:
+        resolve.OpenPage("edit")
+    return name, summary
+
+
+# --- background mode --------------------------------------------------------------------------
+
+def notify(title, message):
+    script = f'display notification {json.dumps(message)} with title {json.dumps(title)}'
+    try:
+        subprocess.run(["osascript", "-e", script], check=False, capture_output=True)
+    except FileNotFoundError:  # not on a Mac
+        pass
+
+
+def load_state():
+    try:
+        return json.loads(STATE.read_text())
+    except (FileNotFoundError, ValueError):
+        return None
+
+
+def save_state(state):
+    STATE.parent.mkdir(parents=True, exist_ok=True)
+    STATE.write_text(json.dumps(state, indent=1))
+
+
+def watch(args):
+    """One pass: build every paper edit that's new or changed since last time. Run by launchd."""
+    drive = drive_folder()
+    if not drive:
+        return
+    stories = {str(p.relative_to(drive)): p.stat().st_mtime
+               for p in (drive / "Paper Edits").glob("**/story.json")}
+    state = load_state()
+    if state is None:  # first run on this Mac: only build paper edits made from now on
+        save_state(stories)
+        print(f"Watching {drive / 'Paper Edits'} ({len(stories)} existing paper edits skipped)")
+        return
+    todo = [rel for rel, mtime in sorted(stories.items(), key=lambda kv: kv[1]) if state.get(rel) != mtime]
+    todo = [rel for rel in todo if time.time() - stories[rel] >= 30]  # let Drive finish syncing
+    if not todo:
+        return
+
+    resolve = connect_resolve(quiet=True)
+    if resolve is None:
+        return  # Resolve isn't open; try again later
+    project = resolve.GetProjectManager().GetCurrentProject()
+    wanted = config_value("resolve_project")
+    if not project or (wanted and project.GetName() != wanted):
+        return  # wait until the editor has the BattleHouse project open
+
+    for rel in todo:
+        try:
+            story, sources = load_story(drive / rel)
+            name, summary = assemble(resolve, story, sources, args, background=True)
+        except (ValueError, KeyError) as e:  # half-synced or malformed file
+            print(f"Skipping {rel} for now: {e}")
+            continue
+        except SystemExit as e:
+            if str(e.code).startswith("Video not found"):
+                # Footage hasn't synced to this Mac yet: tell the editor once, keep retrying.
+                flag = f"{rel}#waiting"
+                if not state.get(flag):
+                    notify("BattleHouse: waiting for footage", f"{e.code} - make the Drive folder available offline")
+                    state[flag] = True
+                    save_state(state)
+                continue
+            notify("BattleHouse: couldn't build rough cut", f"{rel}: {e.code}")
+            name = None
+        state[rel] = stories[rel]
+        save_state(state)
+        if name:
+            notify("BattleHouse rough cut ready", f"{name} - {summary}")
 
 
 def main():
@@ -170,7 +256,14 @@ def main():
     ap.add_argument("story", nargs="?", help="story.json from paper_edit.py (default: newest in Drive)")
     ap.add_argument("--vertical", action="store_true", help="1080x1920 timeline instead of the project default")
     ap.add_argument("--dry-run", action="store_true", help="print the cut list; don't touch Resolve")
+    ap.add_argument("--watch", action="store_true",
+                    help="background mode: build any new paper edits from Drive (run by launchd)")
     args = ap.parse_args()
+
+    if args.watch:
+        args.vertical = args.vertical or bool(config_value("vertical"))
+        watch(args)
+        return
 
     story_file = args.story or latest_story()
     print(f"Paper edit: {story_file}")

@@ -110,7 +110,14 @@ MAC_API = "/Library/Application Support/Blackmagic Design/DaVinci Resolve/Develo
 MAC_LIB = "/Applications/DaVinci Resolve/DaVinci Resolve.app/Contents/Libraries/Fusion/fusionscript.so"
 
 
-def connect_resolve():
+def config_value(key, default=None):
+    if CONFIG.exists():
+        return json.loads(CONFIG.read_text()).get(key, default)
+    return default
+
+
+def connect_resolve(quiet=False):
+    """quiet=True (background mode): return None instead of exiting when Resolve isn't open."""
     # Launched from Resolve's Workspace > Scripts menu: Resolve hands us the app directly.
     import __main__
     for name in ("resolve", "bmd"):
@@ -125,6 +132,8 @@ def connect_resolve():
     except ImportError:
         sys.exit("Couldn't import DaVinciResolveScript. Check RESOLVE_SCRIPT_API (see README).")
     resolve = dvr.scriptapp("Resolve")
+    if resolve is None and quiet:
+        return None
     if resolve is None:
         sys.exit("Couldn't reach Resolve. Is Resolve Studio open, with Preferences > System > "
                  "General > External scripting using set to Local?")
