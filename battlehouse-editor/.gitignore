@@ -1,2 +1,4 @@
 __pycache__/
 prompt.txt
+config.json
+api_key.txt

@@ -16,7 +16,7 @@ import os
 import sys
 from pathlib import Path
 
-from common import connect_resolve, hms
+from common import connect_resolve, drive_folder, find_media, hms
 
 BIN_NAME = "BattleHouse Story"
 ACT_COLORS = ["Red", "Blue", "Cyan", "Pink", "Lavender", "Sand", "Mint", "Rose"]
@@ -29,7 +29,18 @@ def load_story(path):
     sources = story.get("sources")
     if not sources:
         sys.exit("story.json has no source video paths; create it with paper_edit.py.")
-    return story, {k: os.path.expanduser(v) for k, v in sources.items()}
+    return story, {k: find_media(v) for k, v in sources.items()}
+
+
+def latest_story():
+    """Newest story.json in the shared Drive's Paper Edits folder."""
+    drive = drive_folder()
+    if not drive:
+        sys.exit("No Drive folder set up. Run install.command first, or pass a story.json path.")
+    stories = sorted((drive / "Paper Edits").glob("**/story.json"), key=lambda p: p.stat().st_mtime)
+    if not stories:
+        sys.exit(f"No story.json found in {drive / 'Paper Edits'}")
+    return stories[-1]
 
 
 def shot_list(story):
@@ -156,12 +167,14 @@ def assemble(resolve, story, sources, args):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("story", help="story.json from paper_edit.py")
+    ap.add_argument("story", nargs="?", help="story.json from paper_edit.py (default: newest in Drive)")
     ap.add_argument("--vertical", action="store_true", help="1080x1920 timeline instead of the project default")
     ap.add_argument("--dry-run", action="store_true", help="print the cut list; don't touch Resolve")
     args = ap.parse_args()
 
-    story, sources = load_story(args.story)
+    story_file = args.story or latest_story()
+    print(f"Paper edit: {story_file}")
+    story, sources = load_story(story_file)
     if args.dry_run:
         total = 0
         for ai, act, act_start, beat, beat_start, shot in shot_list(story):

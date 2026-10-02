@@ -6,6 +6,55 @@ import sys
 from pathlib import Path
 
 TRANSCRIPT_EXTS = (".srt", ".json")
+HERE = Path(__file__).resolve().parent
+CONFIG = HERE / "config.json"
+
+
+# --- shared Google Drive folder ---------------------------------------------------------------
+# Every editor's Mac mounts the shared Drive at a different path, so story.json stores footage
+# paths *relative to the Drive folder* and each Mac resolves them with its own config.json.
+
+def drive_folder():
+    if CONFIG.exists():
+        folder = json.loads(CONFIG.read_text()).get("drive_folder")
+        if folder and Path(folder).expanduser().is_dir():
+            return Path(folder).expanduser()
+    return None
+
+
+def bible_path():
+    """The shared bible in Drive wins, so every editor works from the same cast/storylines."""
+    drive = drive_folder()
+    if drive and (drive / "bible.md").exists():
+        return drive / "bible.md"
+    return HERE / "story" / "bible.md"
+
+
+def to_portable(path):
+    drive = drive_folder()
+    path = Path(path).resolve()
+    if drive:
+        try:
+            return str(path.relative_to(drive.resolve()))
+        except ValueError:
+            pass
+    return str(path)
+
+
+def find_media(stored):
+    """Turn a stored footage path back into a real file on this Mac."""
+    p = Path(stored).expanduser()
+    if p.is_absolute() and p.exists():
+        return str(p)
+    drive = drive_folder()
+    if drive:
+        if (drive / stored).exists():
+            return str(drive / stored)
+        footage = drive / "Footage" if (drive / "Footage").is_dir() else drive
+        for root, _, files in os.walk(footage):  # fallback: same file name anywhere in Footage
+            if p.name in files:
+                return os.path.join(root, p.name)
+    return str(p)
 
 
 # --- transcripts ------------------------------------------------------------------------------
@@ -62,6 +111,12 @@ MAC_LIB = "/Applications/DaVinci Resolve/DaVinci Resolve.app/Contents/Libraries/
 
 
 def connect_resolve():
+    # Launched from Resolve's Workspace > Scripts menu: Resolve hands us the app directly.
+    import __main__
+    for name in ("resolve", "bmd"):
+        app = getattr(__main__, name, None)
+        if app is not None:
+            return app if name == "resolve" else app.scriptapp("Resolve")
     os.environ.setdefault("RESOLVE_SCRIPT_API", MAC_API)
     os.environ.setdefault("RESOLVE_SCRIPT_LIB", MAC_LIB)
     sys.path.append(os.path.join(os.environ["RESOLVE_SCRIPT_API"], "Modules"))

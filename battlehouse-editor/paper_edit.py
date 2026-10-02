@@ -20,19 +20,34 @@ import sys
 from pathlib import Path
 from typing import List, Literal
 
-from common import find_transcript, hms, load_transcript
+from common import bible_path, drive_folder, find_transcript, hms, load_transcript, to_portable
 
 HERE = Path(__file__).resolve().parent
 STYLE_GUIDE = HERE / "skill" / "SKILL.md"
-BIBLE = HERE / "story" / "bible.md"
 MODEL = "claude-opus-5-5"
 
 
 # --- footage ----------------------------------------------------------------------------------
 
+VIDEO_EXTS = {".mp4", ".mov", ".mxf", ".mkv", ".m4v"}
+
+
+def expand_media(paths):
+    """Accept video files or whole folders (every video in the folder that has a transcript)."""
+    files = []
+    for p in map(lambda x: Path(x).expanduser(), paths):
+        if p.is_dir():
+            files += sorted(f for f in p.rglob("*") if f.suffix.lower() in VIDEO_EXTS and find_transcript(f))
+        else:
+            files.append(p)
+    if not files:
+        sys.exit("No videos with matching transcripts found.")
+    return files
+
+
 def load_sources(media_files):
     sources = {}
-    for media in media_files:
+    for media in expand_media(media_files):
         media = Path(media).expanduser().resolve()
         transcript = find_transcript(media)
         if not transcript:
@@ -92,7 +107,7 @@ kind is one of: dialogue, confessional, host, reaction, broll, action"""
 
 
 def build_prompt(sources, brief, minutes):
-    bible = BIBLE.read_text(encoding="utf-8") if BIBLE.exists() else "(no bible yet)"
+    bible = bible_path().read_text(encoding="utf-8") if bible_path().exists() else "(no bible yet)"
     return INSTRUCTIONS.format(brief=brief or "(none - find the strongest story)", minutes=minutes,
                                bible=bible, footage=format_footage(sources))
 
@@ -179,7 +194,7 @@ def clean_story(story, sources):
             beat["shots"] = kept
         act["beats"] = [b for b in act["beats"] if b["shots"]]
     story["acts"] = [a for a in story["acts"] if a["beats"]]
-    story["sources"] = {sid: src["media"] for sid, src in sources.items()}
+    story["sources"] = {sid: to_portable(src["media"]) for sid, src in sources.items()}
     return story
 
 
@@ -213,10 +228,12 @@ def write_markdown(story, path):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("media", nargs="+", help="video files, each with a matching .srt/.json transcript")
+    ap.add_argument("media", nargs="+",
+                    help="video files or folders; each video needs a matching .srt/.json transcript")
     ap.add_argument("--brief", default="", help="what this episode is / what to focus on")
     ap.add_argument("--minutes", type=int, default=20, help="target running time (default 20)")
-    ap.add_argument("--out", default=".", help="folder for story.json / story.md (default: here)")
+    ap.add_argument("--out", help="folder for story.json / story.md "
+                                  "(default: <Drive>/Paper Edits/<footage folder name>)")
     ap.add_argument("--prompt-only", action="store_true",
                     help="write prompt.txt to paste into the Claude app instead of calling the API")
     ap.add_argument("--import-reply", metavar="FILE",
@@ -226,7 +243,13 @@ def main():
     sources = load_sources(args.media)
     style_guide = STYLE_GUIDE.read_text(encoding="utf-8")
     prompt = build_prompt(sources, args.brief, args.minutes)
-    out = Path(args.out).expanduser()
+    if args.out:
+        out = Path(args.out).expanduser()
+    else:
+        first = Path(args.media[0]).expanduser()
+        episode = (first if first.is_dir() else first.parent).name
+        drive = drive_folder()
+        out = (drive / "Paper Edits" / episode) if drive else Path(episode)
     out.mkdir(parents=True, exist_ok=True)
 
     if args.prompt_only:
