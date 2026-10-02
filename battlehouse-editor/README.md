@@ -11,7 +11,7 @@ Shared Google Drive                          Editor's Mac (DaVinci Resolve Studi
 ├─ Footage/Episode 3/  (.mp4 + .srt)
 ├─ bible.md            (cast + storylines)
 └─ Paper Edits/Episode 3/  ◄── Claude ──     Workspace > Scripts > BattleHouse Assemble
-     story.md   (read & approve)                → rough-cut timeline, ready to edit
+     story.md   (for reference)                 → rough-cut timeline, built automatically
      story.json (used by Resolve)
 ```
 
