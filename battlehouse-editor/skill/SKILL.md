@@ -25,7 +25,10 @@ episode that plays like a reality show, not a stream highlight reel.
    Interleave them; don't play one story start to finish.
 3. **Every storyline needs an arc**: setup → complication → escalation → turn → payoff
    (or cliffhanger if it continues next episode).
-4. **Use the story bible** (cast and running storylines). Pay off threads from earlier episodes,
+4. **Use the story bible** (cast and running storylines). Cast names are their social media
+   handles, and transcripts spell them the way they sound ("Tommy Two Coats" for Tommy2Coats,
+   "Kaycee" for Kayceewins) - match them using the bible's "Sounds like" column and always
+   write the bible name in your output. Pay off threads from earlier episodes,
    keep names and relationships consistent, and flag new storylines.
 
 ## Episode structure  `[VERIFY length and act count]`
