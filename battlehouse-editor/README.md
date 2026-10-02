@@ -95,10 +95,29 @@ so it only happens once per file and everyone on the Drive can reuse it.
 | `transcribe.py` | Step 1 of that: transcribes videos that have no `.srt` yet. `python3 transcribe.py "<Drive>/Footage/Episode 3"` |
 | `paper_edit.py` | Step 2 of that. Command line: `python3 paper_edit.py "<Drive>/Footage/Episode 3" --brief "..." --minutes 20` (`--prompt-only` / `--import-reply` to use the Claude app instead of an API key). |
 | `color.py` | Applies the Drive `Looks/` to each new rough cut (`assemble.py --no-color` skips it). |
+| `package.py` | Builds the zips for moving to another computer (see below). |
+| `CLAUDE.md` | How it all works, for whichever Claude picks this up next. |
 | `uninstall_auto.command` | Turns off automatic rough cuts on that Mac. |
 | `assemble.py` | Builds the timeline. `--watch` is the background job (log: `~/Library/Logs/BattleHouse.log`); the Resolve menu item runs it manually. Command line: `python3 assemble.py [story.json] [--vertical] [--dry-run]`. |
 | `skill/SKILL.md` | How Claude builds a BattleHouse story (A/B/C stories, cold open, act-outs, soundbite rules). Starter – lock in `[VERIFY]` lines with the showrunner. |
 | `story/bible.md` | Template for the shared `bible.md` in Drive. |
+
+## Moving to another computer / another Claude account
+Nothing in the toolkit is tied to one Mac or one Claude account – the Drive path, API key and
+Resolve project are set per Mac by `install.command` and never shipped.
+1. On a set-up Mac run `python3 package.py` → `dist/BattleHouse-Editor.zip` and
+   `dist/battlehouse-story-skill.zip`.
+2. On the new Mac: unzip `BattleHouse-Editor.zip`, double-click `install.command`, and (if this
+   Mac makes paper edits) put **their own** Claude API key in `api_key.txt`.
+3. Optional: in their Claude app, upload `battlehouse-story-skill.zip` (Settings → Capabilities →
+   Skills). Their Claude then knows the BattleHouse story style and cast even in chat – e.g.
+   paste a transcript and ask for a paper edit.
+4. If they use Claude Code, opening this folder loads `CLAUDE.md`, which explains how the
+   toolkit works so their Claude can run, fix or extend it.
+
+No API key? `paper_edit.py --prompt-only` / `--import-reply` work with any Claude chat.
+If the toolkit folder is moved, run `install.command` again (it re-points the background job).
+Optional per-Mac `config.json` keys: `model` (default `claude-opus-5-5`), `vertical`.
 
 ## Good to know
 - Automatic builds only happen while Resolve is open with the BattleHouse project, and only for

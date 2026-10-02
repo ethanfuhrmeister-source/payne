@@ -20,11 +20,11 @@ import sys
 from pathlib import Path
 from typing import List, Literal
 
-from common import bible_path, drive_folder, find_transcript, hms, load_transcript, to_portable
+from common import bible_path, config_value, drive_folder, find_transcript, hms, load_transcript, to_portable
 
 HERE = Path(__file__).resolve().parent
 STYLE_GUIDE = HERE / "skill" / "SKILL.md"
-MODEL = "claude-opus-5-5"
+MODEL = config_value("model", "claude-opus-5-5")  # override per Mac in config.json
 
 
 # --- footage ----------------------------------------------------------------------------------
