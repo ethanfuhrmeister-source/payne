@@ -14,6 +14,14 @@ mkdir -p "$DRIVE/Footage" "$DRIVE/Paper Edits"
 
 python3 -m pip install --quiet --user -r requirements.txt || echo "(pip install failed - only needed for making paper edits)"
 
+# Transcription (only needed on the Mac that makes paper edits): Whisper needs ffmpeg.
+if [ "$(uname -m)" = "arm64" ]; then WHISPER=mlx-whisper; else WHISPER=openai-whisper; fi
+python3 -m pip install --quiet --user "$WHISPER" || echo "(couldn't install $WHISPER)"
+if ! command -v ffmpeg >/dev/null; then
+  if command -v brew >/dev/null; then brew install ffmpeg
+  else echo "NOTE: install ffmpeg for transcription: https://brew.sh then 'brew install ffmpeg'"; fi
+fi
+
 SCRIPTS="$HOME/Library/Application Support/Blackmagic Design/DaVinci Resolve/Fusion/Scripts/Edit"
 mkdir -p "$SCRIPTS"
 cat > "$SCRIPTS/BattleHouse Assemble.py" <<PY

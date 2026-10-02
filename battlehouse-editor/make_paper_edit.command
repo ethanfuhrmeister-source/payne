@@ -11,6 +11,11 @@ echo
 read -r -p "Episode folder name: " EP
 read -r -p "Brief (what's the story / what to focus on, or leave blank): " BRIEF
 read -r -p "Target minutes [20]: " MIN
+echo
+echo "Step 1/2: transcribing any videos that don't have a transcript yet..."
+python3 transcribe.py "$DRIVE/Footage/$EP" || { echo "Transcription failed."; read -r; exit 1; }
+echo
+echo "Step 2/2: building the paper edit with Claude..."
 python3 paper_edit.py "$DRIVE/Footage/$EP" --brief "$BRIEF" --minutes "${MIN:-20}" \
   && open "$DRIVE/Paper Edits/$EP/story.md"
 echo "Press Return to close."

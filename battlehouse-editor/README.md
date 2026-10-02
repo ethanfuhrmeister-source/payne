@@ -15,10 +15,10 @@ Shared Google Drive                          Editor's Mac (DaVinci Resolve Studi
      story.json (used by Resolve)
 ```
 
-1. **Footage + transcripts go in Drive** under `Footage/<episode>/`. Each video needs a
-   transcript next to it with the same name (`day3_main.mp4` + `day3_main.srt`).
+1. **Footage goes in Drive** under `Footage/<episode>/`.
 2. **One person makes the paper edit:** double-click `make_paper_edit.command`, pick the
-   episode, type a one-line brief. Claude writes `story.md` into `Paper Edits/<episode>/`.
+   episode, type a one-line brief. It **transcribes any new footage automatically** (on the
+   Mac, with Whisper), then Claude writes `story.md` into `Paper Edits/<episode>/`.
 3. **Producer/lead reads `story.md`** (storylines, acts, every soundbite with timecodes,
    coverage gaps) and approves it, or re-runs with a sharper brief.
 4. **Editor opens Resolve** → *Workspace → Scripts → Edit → BattleHouse Assemble*. The newest
@@ -48,10 +48,16 @@ Get a Claude API key at console.anthropic.com and save it in a file called `api_
 next to `make_paper_edit.command`. Editors who only assemble don't need a key.
 
 ## Transcripts
-Either works – save the `.srt` next to the video with the same name:
-- **Resolve:** put the clip on a timeline → *Timeline → Create Subtitles from Audio* →
-  *File → Export → Subtitle…*
-- **Whisper:** `whisper day3_main.mp4 --model small --language en --output_format srt`
+`make_paper_edit.command` transcribes automatically: every video in the episode folder
+without a transcript gets a `.srt` saved next to it (`day3_main.mp4` → `day3_main.srt`),
+so it only happens once per file and everyone on the Drive can reuse it.
+- Runs locally with **Whisper** (mlx-whisper on Apple Silicon Macs – roughly a few minutes
+  per hour of footage on an M-series Mac; much slower on Intel). Nothing is uploaded.
+- Cast names from `bible.md` are given to Whisper so handles like *Tommy2Coats* are spelled
+  right. Keep the bible's cast list current.
+- Needs `ffmpeg` (the installer adds it via Homebrew if Homebrew is installed).
+- Already have transcripts (e.g. from Resolve's *Create Subtitles from Audio* → *Export
+  Subtitle*)? Drop the `.srt` next to the video with the same name and it's skipped.
 
 ## Files
 
@@ -59,7 +65,8 @@ Either works – save the `.srt` next to the video with the same name:
 |---|---|
 | `install.command` | One-time setup per Mac: links the Drive folder and adds the Resolve menu item. |
 | `make_paper_edit.command` | Double-click to build a paper edit for an episode. |
-| `paper_edit.py` | What that runs. Command line: `python3 paper_edit.py "<Drive>/Footage/Episode 3" --brief "..." --minutes 20` (`--prompt-only` / `--import-reply` to use the Claude app instead of an API key). |
+| `transcribe.py` | Step 1 of that: transcribes videos that have no `.srt` yet. `python3 transcribe.py "<Drive>/Footage/Episode 3"` |
+| `paper_edit.py` | Step 2 of that. Command line: `python3 paper_edit.py "<Drive>/Footage/Episode 3" --brief "..." --minutes 20` (`--prompt-only` / `--import-reply` to use the Claude app instead of an API key). |
 | `assemble.py` | What the Resolve menu item runs. Command line: `python3 assemble.py [story.json] [--vertical] [--dry-run]`. |
 | `skill/SKILL.md` | How Claude builds a BattleHouse story (A/B/C stories, cold open, act-outs, soundbite rules). Starter – lock in `[VERIFY]` lines with the showrunner. |
 | `story/bible.md` | Template for the shared `bible.md` in Drive. |
